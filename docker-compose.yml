@@ -31,9 +31,20 @@ services:
     environment:
       <<: *elixir-variables
     ports:
-      - "4001:4001"
+      - "4000:4000"
     restart: on-failure
     volumes:
       - "${PWD}/elixir_repo:/usr/src/myapp"
+    command:
+    - /bin/bash
+    - -c 
+    - |
+      cd /usr/src/myapp/friday_project/
+      mix deps.get
+      mix deps.compile
+      mix ecto.create
+      mix ecto.migrate
+      echo "Y" | mix phx.server
+    #  - bash -c "cd friday_project && mix phx.server"
 
 
